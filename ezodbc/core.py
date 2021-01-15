@@ -9,38 +9,45 @@ class data:
 
         try:
             self.prompt = Prompt()
-            self.sql = self.prompt.sql
+            self.sql = self.prompt.sql or ''
             self.connection_string: str = self.set_conn_str()
-            self.engine = self.set_engine()
+            self.engine = self.start_engine()
         except Exception as e:
-            print('oh shit')
-        finally:
-            self.prompt.assure_close()
-        
-        self._query()
-        
+            print(str(e))
+            print('Error!')
+               
 
-    def set_engine(self) -> None:
-        self.engine = sqlalchemy.engine(self.connection_string, connect_args={'connect_timeout': self.query_timeout})
+    def start_engine(self) -> sqlalchemy.engine:
+        if self.prompt.rdbms in('pymssql'):
+            engine = sqlalchemy.create_engine(self.connection_string, connect_args={'timeout': self.query_timeout})
+        else:
+            engine = sqlalchemy.create_engine(self.connection_string, connect_args={'connect_timeout': self.query_timeout})
+        return engine
     
 
     def set_conn_str(self) -> None:
         rdbms_mapper = { # defined in https://docs.sqlalchemy.org/en/13/core/engines.html
             "pyodbc":"mssql+pyodbc://",
-            "pymyssql":"mssql+pymssql://",
-            "mysqldb":"mysql+mysqldb://",
+            "pymssql":"mssql+pymssql://",
+            "mysqldb":"mysql://",
             "psycopg2":"postgresql+psycopg2://",
             "sqlite3":"sqlite:///" # needs //// (4 slashes for mac/linux 'sqlite:///C:\\path\\to\\foo.db')
         }
         try:
             self.rdbms = rdbms_mapper[self.prompt.rdbms]
-            conn_str =  f'{self.rdbms}{self.prompt.domain}\{self.prompt.username}:{self.prompt.password}@{self.prompt.hostip}/{self.prompt.db}'
-            print(conn_str)
+            if self.prompt.domain is None or self.prompt.domain == '':
+                conn_str =  f'{self.rdbms}{self.prompt.username}:{self.prompt.password}@{self.prompt.hostip}/{self.prompt.db}'
+            else:    
+                conn_str =  f'{self.rdbms}{self.prompt.domain}\{self.prompt.username}:{self.prompt.password}@{self.prompt.hostip}/{self.prompt.db}'
         except Exception as e:
-            ValueError("something ain't quite right.")
+            ValueError("something ain't quite right with the entered information.")
+
         return conn_str
 
-    def _query(self) -> pd.DataFrame:
+
+    def run_query(self, **kwargs) -> pd.DataFrame:
+        if kwargs.get("sql") is not None:
+            self.sql = kwargs.get("sql")
         with self.engine.connect() as connection:
             df = pd.read_sql(self.sql, connection)
         return df

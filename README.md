@@ -72,7 +72,8 @@ __Database Type (buttons on left)__ - This is to select the type of connector yo
 2. __Username__ - username for access to the database
 3. __Password__ - password for the username to authenticate
 4. __Database Connection String__ - Host:Port ... in some cases, host will be an IP address, and sometimes it will have a DNS and appear as text. _examples_: 127.0.0.1:3306 and my.database.local:3306
-5. __Copy/Paste SQL Query__ - the SQL Query you want to run. This is optional if you provide it in the constructor, ie df = ez.data(sql="give me your data plz, mr. database")
+5. __Database Name__ - the schema name or database name in the server 
+6. __Copy/Paste SQL Query__ - the SQL Query you want to run. This is optional if you provide it in the constructor, ie df = ez.data(sql="give me your data plz, mr. database")
 
 
 ## Query timeouts

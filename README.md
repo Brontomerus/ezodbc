@@ -58,7 +58,7 @@ def without_ezodbc(user: str, password: str, hostname: str, db_name: str, sql: s
 During execution, you'll see a window pop-up for you to then enter the required information. The window looks like this:
 
 
-![pop-up](https://github.com/Brontomerus/ezodbc/imgs/master/popup.JPG?raw=true)
+![pop-up](https://github.com/Brontomerus/ezodbc/blob/master/imgs/popup.JPG)
 
 
 

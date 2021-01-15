@@ -17,7 +17,12 @@ To install, you must have python 3.6+. Particularly, you will also need [Build T
 
 `pip install ezodbc`
 
+To reduce installation overhead, ezodbc does not automatically download connectors for you. To use the library successfully and depending on what database you have, you must also install your desired python library for connecting to the database. Below are the options you have:
 
+__Microsoft SQL Server__: `pip install pymssql` or `pip install pyodbc`
+__MySQL__: `pip install mysqlclient` 
+__Postgres__: `pip install psycopg2`
+__SQLite__: sqlite3 is a python standard library. No need to pip install.
 
 
 ## Getting Started
@@ -28,12 +33,12 @@ An example of a simple use case, compared with that of regular useage of the con
 ```python
 import sqlalchemy
 import pandas as pd
-import ezodbc as ez
+from ezodbc import ez
 
 
 # both sql and timeout are optional with ezodbc - see below
 def with_ezodbc() -> pd.DataFrame:
-    df = ez.data().run_query()
+    df = ez().run_query()
     return df
 
 
@@ -66,6 +71,7 @@ During execution, you'll see a window pop-up for you to then enter the required 
 
 There are several selections and entries you must make to properly use ezodbc:
 
+__Save Profile Toggle__ - Select whether to save this profile for future use or not. The file is store unencrypted in the users home directory (similar to that of AWS's boto3 and awscli's .aws configure file)
 __Database Type (buttons on left)__ - This is to select the type of connector you'd like to use. The default is pymssql, which is the only one which requires the user to have a __Domain__ filled in.
 
 1. __Domain__ - This is refering to the domain of a username. An example is CORP\brandon, where CORP\ is the domain. This can be left black in all cases but with the default, Microsoft SQL Server Free TDS.
@@ -76,20 +82,48 @@ __Database Type (buttons on left)__ - This is to select the type of connector yo
 6. __Copy/Paste SQL Query__ - the SQL Query you want to run. This is optional if you provide it in the constructor, ie df = ez.data(sql="give me your data plz, mr. database")
 
 
+
+
+
+## Profiles
+
+"It gets annoying to type the information each time, I wish there were a way to easily recycle connection information!"... Do I have some good news for you!
+
+Profiles are useful if you would like to save the connection string for future use, and can do so on a secure machine. On the connection dialogue, simply specify that you would like to save the profile. The package will proceed to verify that your entered information is valid by trying to open a connection on the database. If the test connection succeeds, then the profile will be saved.
+
+Following entering your connection information, you will be prompted to save that connection string with a new prompt that asks for a profile name. That box will appear as the image below:
+
+![pop-up](https://github.com/Brontomerus/ezodbc/blob/master/imgs/save_profile.JPG)
+
+The profiles are saved in your user home directory. That means it would be in a location like `C:/users/YOUR_USER_NAME/.ezodbc/profiles.toml`. Feel free to delete it at any time given you would like to remove all connection strings.
+
+To use a previously saved profile, you can specify a profile_name in the ez constructor:
+
+```python
+from ezodbc import ez
+
+# Example assumes I have a "MyDatabase" profile in C:/users/YOUR_USER_NAME/.ezodbc/profiles.toml
+df = ez(profile_name="MyDatabase", timeout=30).run_query()
+
+```
+
+
+
+
 ## Query timeouts
 
 You can declare connection timeouts (seconds) for running your query. To do so, simply create the constructor with the optional "timeout=" parameter.
 
 ```python
-import ezodbc as ez
+from ezodbc import ez
 sql_query = """give me your data plz, mr. database"""
-df = ez.data(sql=sql_query, timeout=30).run_query()
+df = ez(timeout=30).run_query(sql=sql_query)
 ```
 
 
 ## Planned Enhancements
 
-1. Ability to save connection "profiles" in user's root directory. ie C:/users/USER_NAME/.ezodbc/connections
+1. Basic hashing for the connection string in profiles for added obfuscation
 2. Ability to declare more kwargs for connections. Currently only able to declare query timeout
-
+3. Ability to delete user profiles
 

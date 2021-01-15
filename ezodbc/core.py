@@ -1,27 +1,36 @@
 import sqlalchemy
 import pandas as pd 
-from ezodbc.ui import Prompt
+from ezodbc.ui import Prompt, Profile_Prompt
 
-class data:
-    def __init__(self, _query_timeout: int = 0) -> None:
-        self.query_timeout = _query_timeout
-        self.sql: str = "select 'Im a teapot'"
-
-        try:
-            self.prompt = Prompt()
-            self.sql = self.prompt.sql or ''
-            self.connection_string: str = self.set_conn_str()
-            self.engine = self.start_engine()
-        except Exception as e:
-            print(str(e))
-            print('Error!')
-               
-
-    def start_engine(self) -> sqlalchemy.engine:
-        if self.prompt.rdbms in('pymssql'):
-            engine = sqlalchemy.create_engine(self.connection_string, connect_args={'timeout': self.query_timeout})
+class ez:
+    def __init__(self, timeout: int = 0, profile_name: str = None) -> None:
+        self.query_timeout = timeout
+        self.sql: str = None
+        self.profile_name = profile_name
+        if self.profile_name is None:
+            try:
+                self.prompt = Prompt()
+                self.sql = self.prompt.sql or ''
+                self.connection_string: str = self.set_conn_str()
+                if self.prompt.save_profile:
+                    p = Profile_Prompt()
+                    self.profile_name = p.profile_name
+                    if self.profile_name is None or self.profile_name == '':
+                        raise ValueError('Profile must have a valid name!')
+                    self._add_profile_if_works()
+            except Exception as e:
+                print(str(e))
+                print('Error!')
         else:
-            engine = sqlalchemy.create_engine(self.connection_string, connect_args={'connect_timeout': self.query_timeout})
+            self.connection_string: str = self.import_profile(self.profile_name)
+        self.engine = self.start_engine(timeout=self.query_timeout)
+
+
+    def start_engine(self, timeout: int = 0) -> sqlalchemy.engine:
+        if "pymssql" in self.connection_string:
+            engine = sqlalchemy.create_engine(self.connection_string, connect_args={'timeout': timeout})
+        else:
+            engine = sqlalchemy.create_engine(self.connection_string, connect_args={'connect_timeout': timeout})
         return engine
     
 
@@ -43,6 +52,24 @@ class data:
             ValueError("something ain't quite right with the entered information.")
 
         return conn_str
+
+
+    def import_profile(self, profile_name: str) -> str:
+        from ezodbc.profiles import Profile
+        profile = Profile(profile_name=profile_name)
+        return profile.open_profile()
+
+    def _add_profile_if_works(self) -> None:
+        from ezodbc.profiles import Profile
+        temp_engine = self.start_engine(timeout=15)
+        print(self.connection_string)
+        print(self.profile_name)
+        # try:
+        with temp_engine.connect() as connection:
+            pass    
+        Profile(profile_name=self.profile_name, connection_string=self.connection_string)
+        # except Exception as e:
+        #     print("Was not able to connect using this profile - it will not be saved.")
 
 
     def run_query(self, **kwargs) -> pd.DataFrame:

@@ -10,8 +10,6 @@ from ezodbc import ez
 import pandas as pd
 
 
-
-
 def test_base_obj():
     d = ez(timeout=30)
 
@@ -21,13 +19,16 @@ def test_profile(profile: str):
     assert profile.open_profile() == profile
     
 def test_query(table: str):
-    df = ez(timeout=30).run_query(sql="select * from {table}")
+    sql= f"select * from {table}"
+    df = ez(timeout=30).run_query(sql=sql)
+    assert df is not None
     print(df.head(10))
 
 def test_query_profile(profile: str, table: str):
     sql= f"select * from {table}"
     df = ez(profile_name=profile, timeout=30).run_query(sql=sql)
+    assert df is not None
     print(df.head(10))
 
 test_query_profile('MockAPI', 'LogRequests')
-test_base_obj()
+test_query('LogRequests')

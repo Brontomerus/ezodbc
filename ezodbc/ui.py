@@ -14,33 +14,44 @@ class Prompt(tk.Tk):
         self.db: str = ''
         self.sql: str = ''
         self.fields = ['Domain', 'Username', 'Password', 'Database Connection String', 'Database Name', 'Copy/Paste SQL Query']
-        SaveProfileToggle
-        tk.Tk.__init__(self)
-        self.profile_chk = SaveProfileToggle(self)
-        self.profile_chk.pack(side=tk.TOP,  fill=tk.X)
-        self.profile_chk.config(relief=tk.GROOVE, bd=2)
 
-        self.chk = DBSelector(self)
-        self.chk.pack(side=tk.LEFT,  fill=tk.X)
-        self.chk.config(relief=tk.GROOVE, bd=2)
+        try:
+            tk.Tk.__init__(self)
+            self.profile_chk = SaveProfileToggle(self)
+            self.profile_chk.pack(side=tk.TOP,  fill=tk.X)
+            self.profile_chk.config(relief=tk.GROOVE, bd=2)
 
-        self.ents = self._makeform()
-        self.bind('<Return>', (lambda event, e=self.ents: self._fetch(e))) 
-        self.button = tk.Button(self, text='submit', width = 60, fg="white", bg="blue",command=(lambda e=self.ents: self._fetch(e)))
-        self.button.pack(padx=5, pady=5)
-        self.mainloop()
+            self.chk = DBSelector(self)
+            self.chk.pack(side=tk.LEFT,  fill=tk.X)
+            self.chk.config(relief=tk.GROOVE, bd=2)
+
+            self.ents = self._makeform()
+            self.bind('<Return>', (lambda event, e=self.ents: self._fetch(e))) 
+            self.button = tk.Button(self, text='submit', width = 60, fg="white", bg="blue",command=(lambda e=self.ents: self._fetch(e)))
+            self.button.pack(padx=5, pady=5)
+            self.mainloop()
+        
+        except Exception as e:
+            print(e)
+        finally:
+            self._close()
 
 
     def _fetch(self, entries) -> None:
-        self.save_profile = self.profile_chk.selection()
-        self.rdbms = self.chk.selection()
-        self.domain = entries[0][1].get()
-        self.username = entries[1][1].get()
-        self.password = entries[2][1].get()
-        self.hostip = entries[3][1].get()
-        self.db = entries[4][1].get()
-        self.sql = entries[5][1].get()
-        self.quit()
+        try:
+            self.save_profile = self.profile_chk.selection()
+            self.rdbms = self.chk.selection()
+            self.domain = entries[0][1].get()
+            self.username = entries[1][1].get()
+            self.password = entries[2][1].get()
+            self.hostip = entries[3][1].get()
+            self.db = entries[4][1].get()
+            self.sql = entries[5][1].get()
+        except Exception as e:
+            print(e)
+        finally:
+
+            self.quit()
 
 
     def _makeform(self):
@@ -60,15 +71,9 @@ class Prompt(tk.Tk):
     
     def _close(self) -> None:
         try:
-            del self.rdbms
-            del self.username
-            del self.password
-            del self.hostip
-            del self.sql
             self.quit()
         except Exception as e:
-            pass
-
+            print(e)
 
 
 

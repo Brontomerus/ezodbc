@@ -68,8 +68,10 @@ class ez:
         with temp_engine.connect() as connection:
             pass    
         Profile(profile_name=self.profile_name, connection_string=self.connection_string)
+        return True
         # except Exception as e:
         #     print("Was not able to connect using this profile - it will not be saved.")
+        #     return False
 
 
     def run_query(self, **kwargs) -> pd.DataFrame:

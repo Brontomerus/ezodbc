@@ -1,3 +1,27 @@
+<div align="center">
+  <img src="imgs/logo.jpg" alt="logo"/>
+</div>
+
+<br/>
+
+<div align="center">
+  <!-- Python version -->
+  <a href="https://pypi.python.org/pypi/ezodbc">
+    <img src="https://img.shields.io/badge/python-3.x-blue.svg?style=for-the-badge" alt="PyPI version"/>
+  </a>
+  <!-- PyPi -->
+  <a href="https://pypi.org/project/ezodbc/">
+    <img src="https://img.shields.io/pypi/v/ezodbc.svg?style=for-the-badge" alt="pypi" />
+  </a>
+  <!-- License -->
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/license-BSD-green.svg?style=for-the-badge" alt="license"/>
+  </a>
+</div>
+
+<br/>
+
+
 # ezodbc
 
 ezodbc is a package built for anyone using pandas with a database. ezodbc aims to make it easier, smoother, and more secure to access databases via python by creating a SQLAlechemy engine object to facilitate the connection. and combining that with a GUI based on the tkinter library to provide a simple and intuitive way to enter the required information. Passwords, usernames, and other sensitive information is not saved anywhere (but potentially your own computer in a future release to bypass having to enter it each time). Below is a list of the databases and connectors supported.
@@ -61,10 +85,11 @@ def without_ezodbc(user: str, password: str, hostname: str, db_name: str, sql: s
 ```
 
 During execution, you'll see a window pop-up for you to then enter the required information. The window looks like this:
-
-
-![pop-up](https://github.com/Brontomerus/ezodbc/blob/master/imgs/popup.JPG)
-
+<br/>
+<div align="center">
+  <img src="imgs/popup.JPG" alt="pop-up"/>
+</div>
+<br/>
 
 
 ## Fields & Their Usage
@@ -92,8 +117,11 @@ __Database Type (buttons on left)__ - This is to select the type of connector yo
 Profiles are useful if you would like to save the connection string for future use, and can do so on a secure machine. On the connection dialogue, simply specify that you would like to save the profile. The package will proceed to verify that your entered information is valid by trying to open a connection on the database. If the test connection succeeds, then the profile will be saved.
 
 Following entering your connection information, you will be prompted to save that connection string with a new prompt that asks for a profile name. That box will appear as the image below:
-
-![pop-up](https://github.com/Brontomerus/ezodbc/blob/master/imgs/save_profile.JPG)
+<br/>
+<div align="center">
+  <img src="imgs/save_profile.JPG" alt="save-profile-pop-up"/>
+</div>
+<br/>
 
 The profiles are saved in your user home directory. That means it would be in a location like `C:/users/YOUR_USER_NAME/.ezodbc/profiles.toml`. Feel free to delete it at any time given you would like to remove all connection strings.
 

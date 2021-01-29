@@ -13,7 +13,7 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = 'ezodbc'
-DESCRIPTION = 'easy and secure ODBC connections for analysis with Pandas. No more hard-coded credentials or any of those damn environment variables!'
+DESCRIPTION = 'easy and secure ODBC connections for analysis with Pandas. No more hard-coded credentials or any of those darn environment variables!'
 URL = 'https://github.com/brontomerus/ezodbc'
 EMAIL = 'brandon.donelan@outlook.com'
 AUTHOR = 'Brandon Donelan'
@@ -27,7 +27,10 @@ REQUIRED = [
 
 # What packages are optional?
 EXTRAS = {
-    # 'fancy feature': ['django'],
+    'dev': [
+            'pytest>=3.5.1',
+            'pytest-cov>=2.6.0',
+        ]
 }
 
 here = os.path.abspath(os.path.dirname(__file__))

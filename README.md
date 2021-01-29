@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="imgs/logo.jpg" alt="logo"/>
+  <img src="https://github.com/Brontomerus/ezodbc/blob/master/imgs/logo.jpg" alt="logo"/>
 </div>
 
 <br/>
@@ -87,7 +87,7 @@ def without_ezodbc(user: str, password: str, hostname: str, db_name: str, sql: s
 During execution, you'll see a window pop-up for you to then enter the required information. The window looks like this:
 <br/>
 <div align="center">
-  <img src="imgs/popup.JPG" alt="pop-up"/>
+  <img src="https://github.com/Brontomerus/ezodbc/blob/master/imgs/popup.JPG" alt="pop-up"/>
 </div>
 <br/>
 
@@ -119,7 +119,7 @@ Profiles are useful if you would like to save the connection string for future u
 Following entering your connection information, you will be prompted to save that connection string with a new prompt that asks for a profile name. That box will appear as the image below:
 <br/>
 <div align="center">
-  <img src="imgs/save_profile.JPG" alt="save-profile-pop-up"/>
+  <img src="https://github.com/Brontomerus/ezodbc/blob/master/imgs/save_profile.JPG" alt="save-profile-pop-up"/>
 </div>
 <br/>
 
